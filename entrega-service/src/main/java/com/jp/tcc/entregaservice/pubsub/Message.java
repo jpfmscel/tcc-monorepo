@@ -1,10 +1,13 @@
 package com.jp.tcc.entregaservice.pubsub;
 
-public abstract class Message {
+import lombok.Builder;
+import lombok.Value;
 
-	protected String key;
-	protected Object value;
-	
-	protected abstract String getKey();
-	protected abstract String getValue();
+@Value
+@Builder
+public class Message {
+
+	private String key;
+	private Object value;
+
 }
