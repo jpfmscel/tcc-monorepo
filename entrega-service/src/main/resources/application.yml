@@ -1,14 +1,11 @@
-
-
 adapters:
-  SGE:
-    host: API_GATEWAY_URL/SGE
-  SAF:
-    host: API_GATEWAY_URL/SAF
-  SFC:
-    host: API_GATEWAY_URL/SAF
-    
+   SGE:
+      host: API_GATEWAY_URL/SGE
+   SAF:
+      host: API_GATEWAY_URL/SAF
+   SFC:
+      host: API_GATEWAY_URL/SAF
 credentials:
-  api-gateway:
-    key: ABC1
-    secret: ABC1
+   api-gateway:
+      key: ABC1
+      secret: ABC1
