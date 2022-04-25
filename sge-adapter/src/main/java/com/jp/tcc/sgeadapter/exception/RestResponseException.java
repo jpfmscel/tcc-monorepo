@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.exception;
+package com.jp.tcc.sgeadapter.exception;
 
 import org.springframework.http.HttpStatus;
 

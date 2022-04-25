@@ -1,7 +1,7 @@
-package com.jp.tcc.adapter.sge.dto.request;
+package com.jp.tcc.sgeadapter.dto.request;
 
-import com.jp.tcc.adapter.sge.dto.GeoLocation;
-import com.jp.tcc.adapter.sge.enums.EnumEntregaStatus;
+import com.jp.tcc.sgeadapter.dto.GeoLocation;
+import com.jp.tcc.sgeadapter.enums.EnumEntregaStatus;
 
 import lombok.Builder;
 import lombok.NonNull;

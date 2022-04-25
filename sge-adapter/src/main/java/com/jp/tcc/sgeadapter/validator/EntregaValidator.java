@@ -1,9 +1,9 @@
-package com.jp.tcc.adapter.sge.validator;
+package com.jp.tcc.sgeadapter.validator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jp.tcc.adapter.sge.dto.request.AtualizarEntregaRequestDTO;
+import com.jp.tcc.sgeadapter.dto.request.AtualizarEntregaRequestDTO;
 
 public class EntregaValidator {
 

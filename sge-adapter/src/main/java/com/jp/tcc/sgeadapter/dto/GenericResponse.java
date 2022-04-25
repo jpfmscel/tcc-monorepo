@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.dto;
+package com.jp.tcc.sgeadapter.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.enums;
+package com.jp.tcc.sgeadapter.enums;
 
 import lombok.Getter;
 

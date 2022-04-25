@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.pubsub;
+package com.jp.tcc.sgeadapter.pubsub;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.controller;
+package com.jp.tcc.sgeadapter.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jp.tcc.adapter.sge.dto.request.AtualizarEntregaRequestDTO;
-import com.jp.tcc.adapter.sge.service.EntregaService;
+import com.jp.tcc.sgeadapter.dto.request.AtualizarEntregaRequestDTO;
+import com.jp.tcc.sgeadapter.service.EntregaService;
 
 @RestController
 @RequestMapping(path = "/api/entregas")

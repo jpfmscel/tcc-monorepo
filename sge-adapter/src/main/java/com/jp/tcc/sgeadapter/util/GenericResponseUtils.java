@@ -1,8 +1,8 @@
-package com.jp.tcc.adapter.sge.util;
+package com.jp.tcc.sgeadapter.util;
 
 import java.util.Arrays;
 
-import com.jp.tcc.adapter.sge.dto.GenericResponse;
+import com.jp.tcc.sgeadapter.dto.GenericResponse;
 
 public class GenericResponseUtils {
 

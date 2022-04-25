@@ -1,4 +1,4 @@
-package com.jp.tcc.entregaservice;
+package com.jp.tcc.sgeadapter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

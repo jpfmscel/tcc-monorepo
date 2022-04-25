@@ -9,3 +9,8 @@ credentials:
    api-gateway:
       key: ABC1
       secret: ABC1
+server:
+   port: ${SERVICE_PORT:8081}
+spring:
+   profiles:
+      active: ${SPRING_PROFILE:}

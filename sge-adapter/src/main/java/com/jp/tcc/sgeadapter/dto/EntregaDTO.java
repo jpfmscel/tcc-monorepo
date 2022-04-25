@@ -1,8 +1,8 @@
-package com.jp.tcc.adapter.sge.dto;
+package com.jp.tcc.sgeadapter.dto;
 
 import java.time.LocalDateTime;
 
-import com.jp.tcc.adapter.sge.enums.EnumEntregaStatus;
+import com.jp.tcc.sgeadapter.enums.EnumEntregaStatus;
 
 import lombok.Builder;
 import lombok.NonNull;

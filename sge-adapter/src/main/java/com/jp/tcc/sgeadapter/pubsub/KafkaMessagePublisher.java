@@ -1,4 +1,4 @@
-package com.jp.tcc.adapter.sge.pubsub;
+package com.jp.tcc.sgeadapter.pubsub;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

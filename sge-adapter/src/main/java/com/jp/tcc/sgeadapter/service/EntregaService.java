@@ -1,16 +1,16 @@
-package com.jp.tcc.adapter.sge.service;
+package com.jp.tcc.sgeadapter.service;
 
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jp.tcc.adapter.sge.dto.EntregaDTO;
-import com.jp.tcc.adapter.sge.dto.request.AtualizarEntregaRequestDTO;
-import com.jp.tcc.adapter.sge.exception.BadRequestException;
-import com.jp.tcc.adapter.sge.pubsub.IMessagePublisher;
-import com.jp.tcc.adapter.sge.pubsub.Message;
-import com.jp.tcc.adapter.sge.validator.EntregaValidator;
+import com.jp.tcc.sgeadapter.dto.EntregaDTO;
+import com.jp.tcc.sgeadapter.dto.request.AtualizarEntregaRequestDTO;
+import com.jp.tcc.sgeadapter.exception.BadRequestException;
+import com.jp.tcc.sgeadapter.pubsub.IMessagePublisher;
+import com.jp.tcc.sgeadapter.pubsub.Message;
+import com.jp.tcc.sgeadapter.validator.EntregaValidator;
 
 @Service
 public class EntregaService {
