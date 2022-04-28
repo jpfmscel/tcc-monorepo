@@ -2,6 +2,7 @@ package com.jp.tcc.entregaservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,11 +20,19 @@ public class EntregaController {
 	private EntregaService service;
 
 	@PutMapping(value = "/{entregaId}")
-	public ResponseEntity findById(@PathVariable String entregaId, @RequestBody AtualizarEntregaRequestDTO entregaRequest) {
+	public ResponseEntity update(@PathVariable String entregaId, @RequestBody AtualizarEntregaRequestDTO entregaRequest) {
 		
 		service.atualizarEntrega(entregaId, entregaRequest);
 		
 		return ResponseEntity.ok(null);
 	}
 
+	@GetMapping(value = "/{entregaId}")
+	public ResponseEntity findById(@PathVariable String entregaId) {
+		
+		service.buscarEntrega(entregaId);
+		
+		return ResponseEntity.ok(null);
+	}
+	
 }
