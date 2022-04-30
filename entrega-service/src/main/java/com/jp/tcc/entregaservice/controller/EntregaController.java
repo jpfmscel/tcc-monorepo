@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jp.tcc.entregaservice.dto.EntregaDTO;
 import com.jp.tcc.entregaservice.dto.request.AtualizarEntregaRequestDTO;
 import com.jp.tcc.entregaservice.service.EntregaService;
 
@@ -28,11 +29,11 @@ public class EntregaController {
 	}
 
 	@GetMapping(value = "/{entregaId}")
-	public ResponseEntity findById(@PathVariable String entregaId) {
+	public ResponseEntity<EntregaDTO> findById(@PathVariable String entregaId) {
 		
-		service.buscarEntrega(entregaId);
+		var buscarEntregaResponse = service.buscarEntrega(entregaId);
 		
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(buscarEntregaResponse);
 	}
 	
 }

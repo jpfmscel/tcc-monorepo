@@ -15,10 +15,10 @@ public class EntregaDTO {
 	@NonNull
 	String entregaId;
 	
-	@NonNull
+//	@NonNull
 	GeoLocation geolocation;
 	
-	@NonNull
+//	@NonNull
 	LocalDateTime lastUpdate;
 	
 	@NonNull

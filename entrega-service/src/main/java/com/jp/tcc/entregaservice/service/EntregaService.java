@@ -5,12 +5,15 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQuery;
+import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQueryRequest;
+import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQueryResponse;
 import com.jp.tcc.entregaservice.dto.EntregaDTO;
 import com.jp.tcc.entregaservice.dto.request.AtualizarEntregaRequestDTO;
 import com.jp.tcc.entregaservice.exception.BadRequestException;
-import com.jp.tcc.entregaservice.facade.SGEFacade;
 import com.jp.tcc.entregaservice.pubsub.IMessagePublisher;
 import com.jp.tcc.entregaservice.pubsub.Message;
+import com.jp.tcc.entregaservice.util.AutowiredHelper;
 import com.jp.tcc.entregaservice.validator.EntregaValidator;
 
 @Service
@@ -18,7 +21,8 @@ public class EntregaService {
 
 	private final IMessagePublisher messagePublisher;
 
-//	private final SGEFacade sgeFacade;
+	@Autowired
+	private AutowiredHelper autowiredHelper;
 	
 	@Autowired
 	public EntregaService(IMessagePublisher messagePublisher) {
@@ -26,9 +30,13 @@ public class EntregaService {
 	}
 
 	public EntregaDTO buscarEntrega(String entregaId) {
-		return null;
+		
+		var request = GetEntregaByIdQueryRequest.builder().entregaId(entregaId).build();
+		var response = ((GetEntregaByIdQueryResponse)autowiredHelper.getQuery(GetEntregaByIdQuery.class).execute(request));
+		
+		return EntregaDTO.builder().entregaId(entregaId).status(response.getStatus()).build();
 	}
-	
+
 	public void atualizarEntrega(String entregaId, AtualizarEntregaRequestDTO entregaRequest) {
 
 		var errorList = EntregaValidator.validate(entregaRequest);
@@ -41,6 +49,7 @@ public class EntregaService {
 				.lastUpdate(LocalDateTime.now()).status(entregaRequest.getStatus()).build();
 
 		var message = Message.builder().key(entregaId).value(entrega).build();
+		
 		messagePublisher.publish(message);
 	}
 }
