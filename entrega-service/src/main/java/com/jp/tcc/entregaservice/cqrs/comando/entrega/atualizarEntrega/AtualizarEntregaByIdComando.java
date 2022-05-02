@@ -13,11 +13,15 @@ import com.jp.tcc.entregaservice.dto.Problem;
 import com.jp.tcc.entregaservice.dto.sge.EntregaSGEDTO;
 import com.jp.tcc.entregaservice.exception.BadRequestException;
 import com.jp.tcc.entregaservice.facade.SGEFacade;
+import com.jp.tcc.entregaservice.pubsub.IMessagePublisher;
 import com.jp.tcc.entregaservice.pubsub.Message;
 
 @Component
 public class AtualizarEntregaByIdComando implements IComando<AtualizarEntregaByIdComandoRequest> {
 
+	@Autowired
+	private IMessagePublisher messagePublisher;
+	
 	@Override
 	public void execute(AtualizarEntregaByIdComandoRequest request) {
 

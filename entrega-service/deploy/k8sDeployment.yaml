@@ -1,0 +1,127 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: $DEPLOY_NAME
+spec:
+   selector:
+      matchLabels:
+         layer: backend
+         app: $DEPLOY_NAME
+   replicas: 1
+   strategy:
+# indicate which strategy we want for rolling update
+      type: RollingUpdate
+      rollingUpdate:
+         maxSurge: 1
+         maxUnavailable: 0
+   template:
+      metadata:
+         labels:
+            layer: backend
+            app: $DEPLOY_NAME
+      spec:
+         containers:
+         -  name: $DEPLOY_NAME
+            image: $DEPLOY_IMAGE
+# it will try to pull the image out even if the image with particular tag already exists in registry
+            imagePullPolicy: Always
+# limit resources which can be allocated per deployment
+            resources:
+# do not remove requests block even if it contains zero values
+               requests:
+                  cpu: '1' #TODO: Allocate CPU resources only in case you're really going to utilize all of it
+                  memory: 1024Mi #TODO: Minimum amount of RAM should be allocated - follow the same rule as for CPU
+               limits:
+                  cpu: '2'
+                  memory: 1526Mi
+            ports:
+            -  name: service-port
+               containerPort: 8080
+            envFrom:
+            -  secretRef:
+                  name: app-secrets
+            env:
+            -  name: SPRING_PROFILE
+               value: $EXECUTION_ENVIRONMENT
+            livenessProbe:
+               httpGet:
+                  path: /actuator/health # health endpoint is automatically provided by Spring Actuator
+                  port: service-port
+               initialDelaySeconds: 21
+               failureThreshold: 3
+               timeoutSeconds: 3
+               periodSeconds: 15
+# readiness probe allows to route traffic to the pod only in case if application has already started responding
+            readinessProbe:
+               tcpSocket:
+                  port: service-port
+               initialDelaySeconds: 20
+               periodSeconds: 3
+         imagePullSecrets:
+         -  name: $IMAGE_PULL_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: $DEPLOY_NAME
+   labels:
+      layer: backend
+      app: $DEPLOY_NAME
+spec:
+   ports:
+   -  protocol: TCP
+      port: 8080
+      targetPort: 8080
+   selector:
+      app: $DEPLOY_NAME
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: $DEPLOY_NAME
+    layer: backend
+  name: $DEPLOY_NAME
+spec:
+  ingressClassName: internal
+  rules:
+  - host: $INGRESS_SERVICE_HOSTNAME
+    http:
+      paths:
+      - backend:
+          service:
+            name: $DEPLOY_NAME
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+   name: $DEPLOY_NAME
+spec:
+   maxReplicas: 5
+   minReplicas: 1
+   scaleTargetRef:
+      apiVersion: apps/v1beta1
+      kind: Deployment
+      name: $DEPLOY_NAME
+   behavior:
+      scaleDown:
+         stabilizationWindowSeconds: 200
+         policies:
+         -  type: Pods
+            value: 1
+            periodSeconds: 120 # (i.e., scale down one pod every 200 sec)
+      scaleUp:
+         stabilizationWindowSeconds: 0
+   metrics:
+   -  type: Resource
+      resource:
+         name: cpu
+         target:
+            type: Utilization
+            averageUtilization: 10
