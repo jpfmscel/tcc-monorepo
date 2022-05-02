@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jp.tcc</groupId>
-	<artifactId>entrega-service</artifactId>
+	<artifactId>mercadoria-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>entrega-service</name>
-	<description>Microservico do dominio da entidade entregas</description>
+	<name>mercadoria-service</name>
+	<description>Microservico do dominio da entidade mercadoria</description>
 
 	<properties>
 		<java.version>11</java.version>

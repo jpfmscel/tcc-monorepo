@@ -1,12 +1,12 @@
 server:
-   port: ${SERVICE_PORT:8080}
+   port: ${SERVICE_PORT:8082}
    compression:
       enabled: true
       mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/hal+json
       
 spring:
    application:
-      name: entrega-service
+      name: mercadoria-service
    profiles:
       active: ${SPRING_PROFILE:}
    jpa:
