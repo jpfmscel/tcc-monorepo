@@ -1,16 +1,25 @@
-adapters:
-   SGE:
-      host: API_GATEWAY_URL/SGE
-   SAF:
-      host: API_GATEWAY_URL/SAF
-   SFC:
-      host: API_GATEWAY_URL/SAF
+server:
+   port: ${SERVICE_PORT:8080}
+   compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/hal+json
+      
+spring:
+   profiles:
+      active: ${SPRING_PROFILE:}
+   jpa:
+      properties:
+         hibernate:
+            format_sql: false
+            batch_size: 50
+            order_updates: true
+            batch_versioned_data: true
+      hibernate:
+         ddl-auto: none
+   liquibase:
+      enabled: false
+      
 credentials:
    api-gateway:
       key: ABC1
       secret: ABC1
-server:
-   port: ${SERVICE_PORT:8080}
-spring:
-   profiles:
-      active: ${SPRING_PROFILE:}

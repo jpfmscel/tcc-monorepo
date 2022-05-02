@@ -1,42 +1,41 @@
 package com.jp.tcc.entregaservice.service;
 
-import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.jp.tcc.entregaservice.cqrs.comando.IComando;
+import com.jp.tcc.entregaservice.cqrs.comando.entrega.atualizarEntrega.AtualizarEntregaByIdComando;
+import com.jp.tcc.entregaservice.cqrs.comando.entrega.atualizarEntrega.AtualizarEntregaByIdComandoRequest;
+import com.jp.tcc.entregaservice.cqrs.query.IQuery;
 import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQuery;
 import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQueryRequest;
 import com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById.GetEntregaByIdQueryResponse;
-import com.jp.tcc.entregaservice.dto.EntregaDTO;
 import com.jp.tcc.entregaservice.dto.request.AtualizarEntregaRequestDTO;
 import com.jp.tcc.entregaservice.exception.BadRequestException;
-import com.jp.tcc.entregaservice.pubsub.IMessagePublisher;
-import com.jp.tcc.entregaservice.pubsub.Message;
-import com.jp.tcc.entregaservice.util.AutowiredHelper;
 import com.jp.tcc.entregaservice.validator.EntregaValidator;
 
 @Service
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class EntregaService {
 
-	private final IMessagePublisher messagePublisher;
-
 	@Autowired
-	private AutowiredHelper autowiredHelper;
+	@Qualifier("queryMap")
+	private Map<Class<? extends IQuery>, ? extends IQuery> queryMap;
 	
 	@Autowired
-	public EntregaService(IMessagePublisher messagePublisher) {
-		this.messagePublisher = messagePublisher;
-	}
-
-	public EntregaDTO buscarEntrega(String entregaId) {
-		
+	@Qualifier("comandoMap")
+	private Map<Class<? extends IComando>, ? extends IComando> comandoMap;
+	
+	public GetEntregaByIdQueryResponse buscarEntrega(String entregaId) {
 		var request = GetEntregaByIdQueryRequest.builder().entregaId(entregaId).build();
-		var response = ((GetEntregaByIdQueryResponse)autowiredHelper.getQuery(GetEntregaByIdQuery.class).execute(request));
+		var response = (GetEntregaByIdQueryResponse) queryMap.get(GetEntregaByIdQuery.class).execute(request);
 		
-		return EntregaDTO.builder().entregaId(entregaId).status(response.getStatus()).build();
+		return response;
 	}
-
+	
 	public void atualizarEntrega(String entregaId, AtualizarEntregaRequestDTO entregaRequest) {
 
 		var errorList = EntregaValidator.validate(entregaRequest);
@@ -45,11 +44,13 @@ public class EntregaService {
 			throw new BadRequestException(errorList);
 		}
 
-		var entrega = EntregaDTO.builder().entregaId(entregaId).geolocation(entregaRequest.getGeolocation())
-				.lastUpdate(LocalDateTime.now()).status(entregaRequest.getStatus()).build();
-
-		var message = Message.builder().key(entregaId).value(entrega).build();
+		var request = AtualizarEntregaByIdComandoRequest.builder()
+			.entregaId(entregaId)
+			.geolocation(entregaRequest.getGeolocation())
+			.status(entregaRequest.getStatus())
+		.build();
 		
-		messagePublisher.publish(message);
+		comandoMap.get(AtualizarEntregaByIdComando.class).execute(request);
+		
 	}
 }

@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jp.tcc.entregaservice.cqrs.comando.IComando;
-import com.jp.tcc.entregaservice.dto.EntregaDTO;
 import com.jp.tcc.entregaservice.dto.Problem;
-import com.jp.tcc.entregaservice.dto.sge.EntregaSGEDTO;
 import com.jp.tcc.entregaservice.exception.BadRequestException;
-import com.jp.tcc.entregaservice.facade.SGEFacade;
 import com.jp.tcc.entregaservice.pubsub.IMessagePublisher;
 import com.jp.tcc.entregaservice.pubsub.Message;
+import com.jp.tcc.entregaservice.pubsub.messagesDTO.AtualizarEntregaByIdMessage;
 
 @Component
 public class AtualizarEntregaByIdComando implements IComando<AtualizarEntregaByIdComandoRequest> {
@@ -25,18 +23,17 @@ public class AtualizarEntregaByIdComando implements IComando<AtualizarEntregaByI
 	@Override
 	public void execute(AtualizarEntregaByIdComandoRequest request) {
 
-		List<Problem> problems = request.validate();
+		List<Problem> problems = request.validateInput();
 		if (!problems.isEmpty()) {
 			throw new BadRequestException(problems.stream().map(Problem::getSummary).collect(Collectors.toList()));
 		}
+		
+		var payload = AtualizarEntregaByIdMessage.builder().entregaId(request.getEntregaId()).geolocation(request.getGeolocation())
+				.lastUpdate(LocalDateTime.now()).status(request.getStatus()).build();
 
-		var entrega = EntregaDTO.builder().entregaId(entregaId).geolocation(entregaRequest.getGeolocation())
-				.lastUpdate(LocalDateTime.now()).status(entregaRequest.getStatus()).build();
-
-		var message = Message.builder().key(entregaId).value(entrega).build();
+		var message = Message.builder().key(request.getEntregaId()).value(payload).build();
 		
 		messagePublisher.publish(message);
-		
 	}
 
 }

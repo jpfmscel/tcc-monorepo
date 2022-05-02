@@ -26,14 +26,14 @@ public class AtualizarEntregaByIdComandoRequest implements IComandoRequest{
 	private final EnumEntregaStatus status;
 	
 	@Override
-	public List<Problem> validate() {
+	public List<Problem> validateInput() {
 		List<Problem> problems = new ArrayList<>();
 		
 		if(entregaId==null || entregaId.isBlank()) {
 			problems.add(new Problem("ID da entrega eh invalido"));
 		}
 		
-		if(geolocation.isValid()) {
+		if(!geolocation.isValid()) {
 			problems.add(new Problem("Geolocalizacao eh invalida"));
 		}
 		

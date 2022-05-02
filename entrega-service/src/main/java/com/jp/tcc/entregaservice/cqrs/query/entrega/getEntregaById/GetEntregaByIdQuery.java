@@ -1,22 +1,21 @@
 package com.jp.tcc.entregaservice.cqrs.query.entrega.getEntregaById;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jp.tcc.entregaservice.cqrs.query.IQuery;
 import com.jp.tcc.entregaservice.dto.Problem;
-import com.jp.tcc.entregaservice.dto.sge.EntregaSGEDTO;
+import com.jp.tcc.entregaservice.enums.EnumEntregaStatus;
 import com.jp.tcc.entregaservice.exception.BadRequestException;
-import com.jp.tcc.entregaservice.facade.SGEFacade;
+import com.jp.tcc.entregaservice.repository.EntregaRepository;
 
 @Component
 public class GetEntregaByIdQuery implements IQuery<GetEntregaByIdQueryRequest, GetEntregaByIdQueryResponse> {
 
-	@Autowired
-	private SGEFacade sgeFacade;
+	private EntregaRepository entregaRepository;
 	
 	@Override
 	public GetEntregaByIdQueryResponse execute(GetEntregaByIdQueryRequest request) {
@@ -26,17 +25,16 @@ public class GetEntregaByIdQuery implements IQuery<GetEntregaByIdQueryRequest, G
 			throw new BadRequestException(problems.stream().map(Problem::getSummary).collect(Collectors.toList()));
 		}
 
-		EntregaSGEDTO buscarEntrega = sgeFacade.buscarEntrega(request.getEntregaId());
-		
-		return	GetEntregaByIdQueryResponse.builder()
-					.destinatario(buscarEntrega.getDestinatario())
-					.entregaId(request.getEntregaId())
-					.pesoEmKg(buscarEntrega.getPesoEmKg())
-					.remetente(buscarEntrega.getRemetente())
-					.status(buscarEntrega.getStatus())
-					.titulo(buscarEntrega.getTitulo())
+		GetEntregaByIdQueryResponse response = GetEntregaByIdQueryResponse.builder()
+				.destinatario("Destinatario " + Instant.now().getEpochSecond())
+				.entregaId(String.valueOf(Instant.now().getNano()))
+				.pesoEmKg(Float.valueOf(String.valueOf(Math.random())))
+				.remetente("Remetente " + Instant.now().getEpochSecond())
+				.status(EnumEntregaStatus.EM_PREPARO)
+				.titulo("Entrega " + String.valueOf(Math.random()))
 				.build();
 		
+		return	response;
 	}
 
 }

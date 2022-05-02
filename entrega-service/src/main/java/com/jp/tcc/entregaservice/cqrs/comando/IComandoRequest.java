@@ -6,5 +6,5 @@ import com.jp.tcc.entregaservice.dto.Problem;
 
 public interface IComandoRequest {
 
-	List<Problem> validate();
+	List<Problem> validateInput();
 }
